@@ -1,5 +1,5 @@
 require "rubygems"
-gem "rspec", "=1.1.12"
+gem "rspec", "=1.2.4"
 require 'spec'
 require 'spec/example/example_group'
 
@@ -14,19 +14,20 @@ require 'spec/example/example_group'
 #
 module Spec
   module Example
-    
-    class ExampleGroup
+    module ExampleMethods
+      
       attr_reader :execution_error
 
-      def execute(options, instance_variables)
-        options.reporter.example_started(self)
+      def execute(run_options, instance_variables) # :nodoc:
+        puts caller unless caller(0)[1] =~ /example_group_methods/
+        run_options.reporter.example_started(@_proxy)
         set_instance_variables_from_hash(instance_variables)
         
         @execution_error = nil
-        Timeout.timeout(options.timeout) do
+        Timeout.timeout(run_options.timeout) do
           begin
             before_each_example
-            eval_block
+            instance_eval(&@_implementation)
           rescue Exception => e
             @execution_error ||= e
           end
@@ -37,9 +38,10 @@ module Spec
           end
         end
 
-        options.reporter.example_finished(self, @execution_error)
+        run_options.reporter.example_finished(@_proxy.update(description), @execution_error)
         success = @execution_error.nil? || ExamplePendingError === @execution_error
       end
+
       
     end
   end

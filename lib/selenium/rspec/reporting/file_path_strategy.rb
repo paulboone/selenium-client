@@ -59,10 +59,16 @@ module Selenium
           the_file_path
         end
 
-        def example_hash(example)
-          # backtrace is not reliable anymore using the implementation proc          
-          implementation = example.instance_variable_get :'@_implementation'
-          Digest::MD5.hexdigest implementation.inspect
+        def example_hash(example)          
+          #if example doesn't have @_proxy, it is a proxy
+          proxy = nil
+          if example.instance_variable_defined?(:'@_proxy')
+            proxy = example.instance_variable_get(:'@_proxy')
+          else
+            proxy = example          
+          end
+          
+          Digest::MD5.hexdigest proxy.location
         end
       
       end

@@ -18,9 +18,10 @@ unit_tests do
     strategy = Selenium::RSpec::Reporting::FilePathStrategy.new "report.html"
   
     first_example = Object.new
-    first_example.instance_variable_set :'@_implementation', Proc.new {}
+    first_example.stubs(:location).returns('./blah/blah:6')
+    
     second_example = Object.new
-    second_example.instance_variable_set :'@_implementation', Proc.new {}
+    second_example.stubs(:location).returns('./blah/blah:21')
 
     assert strategy.example_hash(first_example) != strategy.example_hash(second_example)
   end
@@ -28,11 +29,11 @@ unit_tests do
   test "example_hash is the same when examples implementation is identical" do
     strategy = Selenium::RSpec::Reporting::FilePathStrategy.new "report.html"
 
-    same_implementation = Proc.new {}  
     first_example = Object.new
-    first_example.instance_variable_set :'@_implementation', same_implementation
+    first_example.stubs(:location).returns('./blah/blah:6')
     second_example = Object.new
-    second_example.instance_variable_set :'@_implementation', same_implementation
+    second_example.stubs(:location).returns('./blah/blah:6')
+    
     assert_equal strategy.example_hash(first_example), 
                  strategy.example_hash(second_example)
   end

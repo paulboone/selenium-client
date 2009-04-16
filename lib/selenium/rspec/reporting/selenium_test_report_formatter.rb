@@ -6,7 +6,7 @@
 require "digest/md5"
 require "base64"
 require "rubygems"
-gem "rspec", "1.1.12"
+gem "rspec", "1.2.4"
 require "spec"
 require 'spec/runner/formatter/html_formatter'
 require File.expand_path(File.dirname(__FILE__) + "/file_path_strategy")
@@ -25,7 +25,7 @@ module Selenium
         example_group = Object.new
         def example_group.description; ""; end
         add_example_group(example_group)
-        @@file_path_strategy = Selenium::RSpec::Reporting::FilePathStrategy.new(@where)
+        @@file_path_strategy = Selenium::RSpec::Reporting::FilePathStrategy.new(output.path)
       end  
   
       def move_progress
@@ -36,18 +36,7 @@ module Selenium
         Selenium::RSpec::Reporting::HtmlReport.inject_placeholder(super)
       end
   
-      def example_passed(example)
-        include_example_group_description example
-        super
-      end
-  
-      def example_pending(example, message, pending_caller)
-        include_example_group_description example
-        super
-      end
-  
       def example_failed(example, counter, failure)
-        include_example_group_description example
         
         old_output = @output
         @output = StringIO.new
@@ -84,14 +73,6 @@ module Selenium
 	      @@file_path_strategy ||= Selenium::RSpec::Reporting::FilePathStrategy.new(ENV["SELENIUM_TEST_REPORT_FILE"])
 	    end
 	
-      protected
-        
-      def include_example_group_description(example)
-        def example.description
-          self.class.description.to_s + " :: " + super
-        end
-      end
-  
     end
   end
 end
