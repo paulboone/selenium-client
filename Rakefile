@@ -202,10 +202,10 @@ end
 specification = Gem::Specification.new do |s|
   s.name = "selenium-client"
   s.summary = "Official Ruby Client for Selenium RC."
-  s.version = "1.2.15"
+  s.version = "1.2.14.1"
   s.author = "OpenQA"
   s.email = 'selenium-client@rubyforge.org'
-  s.homepage = "http://selenium-client.rubyforge.com"
+  s.homepage = "http://github.com/paulboone/selenium-client/"
   s.rubyforge_project = 'selenium-client'
   s.platform = Gem::Platform::RUBY
   s.files = FileList['lib/**/*.rb'] +  FileList['examples/**/*.rb']

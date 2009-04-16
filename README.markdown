@@ -1,3 +1,6 @@
+Modified to support rspec 1.2.4
+===============================
+
 Welcome to the official Ruby driver for [Selenium Remote Control](http://selenium-rc.openqa.org)
 
 Mission
