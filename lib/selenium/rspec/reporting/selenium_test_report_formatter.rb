@@ -24,7 +24,7 @@ module Selenium
         # prevents js and html validity errors
         example_group = Object.new
         def example_group.description; ""; end
-        add_example_group(example_group)
+        example_group_started(example_group)
         @@file_path_strategy = Selenium::RSpec::Reporting::FilePathStrategy.new(output.path)
       end  
   
